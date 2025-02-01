@@ -7,6 +7,13 @@ export const styles = StyleSheet.create({
       paddingHorizontal: 20,
       marginTop: 40,
     },
+    difficultyContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      width: '80%',
+      marginBottom: 20,
+      gap: 10,
+    },
     timer: {
       fontSize: 24,
       textAlign: 'center',

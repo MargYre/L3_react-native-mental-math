@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { rndNumber, DIFFICULTY } from '../utils/number';
 import { getMaxTime } from '../utils/timer';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 export const useGameLogic = () => {
   const [difficulty, setDifficulty] = useState(DIFFICULTY.EASY);
@@ -32,7 +31,7 @@ export const useGameLogic = () => {
   useEffect(() => {
     const timer = setInterval(decreaseTime, 1000); 
     return () => clearInterval(timer);
-  }, []);
+  }, [difficulty]);
 
   useEffect(() => {
     if (timeLeft === 0) {
@@ -42,8 +41,8 @@ export const useGameLogic = () => {
   }, [timeLeft, solution]);
 
   const resetGame = () => {
-    setNumberOne(rndNumber());
-    setNumberTwo(rndNumber());
+    setNumberOne(rndNumber(difficulty));
+    setNumberTwo(rndNumber(difficulty));
     if (difficulty === DIFFICULTY.HARD) {
       setNumberThree(rndNumber());
     }
@@ -57,7 +56,7 @@ export const useGameLogic = () => {
     setScore(0);
   }
 
-  const changeDifficulty = () => {
+  const changeDifficulty = (newDifficulty) => {
     setDifficulty(newDifficulty);
     resetGame();
     resetScore();
@@ -78,7 +77,6 @@ export const useGameLogic = () => {
     difficulty,
     numberOne,
     numberTwo,
-    solution,
     numberThree,
     solution,
     userAnswer,
