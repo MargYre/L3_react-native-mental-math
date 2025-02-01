@@ -3,6 +3,8 @@ import { styles } from './styles';
 import { DIFFICULTY } from './src/utils/number';
 import { formatTime } from './src/utils/timer';
 import { useGameLogic } from './src/hooks/useGameLogic.js';
+import DifficultySelector from './src/components/DifficultySelector';
+import GameHeader from './src/components/GameHeader';
 
 export default function App() {
   const {
@@ -24,24 +26,16 @@ export default function App() {
   } = useGameLogic();
   
   return (
+    
     <View style={styles.container}>
-      <View style={styles.difficultyContainer}>
-        <Button
-          title="Facile"
-          onPress={() => changeDifficulty(DIFFICULTY.EASY)}
-          color={difficulty === DIFFICULTY.EASY ? '#4CAF50' : '#888'}
-        />
-        <Button
-          title="Difficile"
-          onPress={() => changeDifficulty(DIFFICULTY.HARD)}
-          color={difficulty === DIFFICULTY.HARD ? '#f44336' : '#888'}
-        />
-      </View>
+      <DifficultySelector
+        difficulty={difficulty}
+        changeDifficulty={changeDifficulty}
+        containerStyle={styles.difficultyContainer}
+      />
+      <GameHeader timeLeft={timeLeft} score={score} />
 
-      <Text style={styles.timer}>{formatTime(timeLeft)}</Text>
-      <Text style={styles.text}>Score : {score}</Text>
-
-      <Text style={styles.text}>
+      <Text style={styles.numberContainer}>
         {numberOne} + {numberTwo}
         {difficulty === DIFFICULTY.HARD ? ` + ${numberThree}` : ''} = 
       </Text>
@@ -52,21 +46,27 @@ export default function App() {
         onChangeText={(text) => setUserAnswer(Number(text))}
         value={userAnswer ? String(userAnswer) : ''}
       />
-      <Button
-        title='Valider'
-        onPress={handleSubmit}
-        disabled={!btnEnabled}
-      />
+      <View style={{ backgroundColor: 'pink', borderRadius: 10, overflow: 'hidden' }}>
+        <Button
+          title='Valider'
+          onPress={handleSubmit}
+          color="lightblue"
+          disabled={!btnEnabled}
+        />
+      </View>
       <Text style={styles.message}>{msg}</Text>
+      <View style={{ backgroundColor: 'lemonchiffon', borderRadius: 10, overflow: 'hidden' }}>
       {!btnEnabled && (
         <Button
           title='Nouvelle partie'
+          color={'lightblue'}
           onPress={() => {
             resetGame();
             resetScore();
           }}
         />
       )}
+      </View>
     </View>
   );
 }
