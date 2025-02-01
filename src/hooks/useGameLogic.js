@@ -1,23 +1,33 @@
 import { useState, useEffect, useCallback } from 'react';
-import { rndNumber } from '../utils/number';
-import { MAX_TIME } from '../utils/timer';
+import { rndNumber, DIFFICULTY } from '../utils/number';
+import { getMaxTime } from '../utils/timer';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 export const useGameLogic = () => {
-  const [numberOne, setNumberOne] = useState(rndNumber());
-  const [numberTwo, setNumberTwo] = useState(rndNumber());
+  const [difficulty, setDifficulty] = useState(DIFFICULTY.EASY);
+  const [numberOne, setNumberOne] = useState(rndNumber(difficulty));
+  const [numberTwo, setNumberTwo] = useState(rndNumber(difficulty));
+  //
+  const [numberThree, setNumberThree] = useState(rndNumber(difficulty));
   const [solution, setSolution] = useState();
   const [userAnswer, setUserAnswer] = useState(0);
   const [msg, setMsg] = useState('');
-  const [timeLeft, setTimeLeft] = useState(MAX_TIME);
+  //const [timeLeft, setTimeLeft] = useState(MAX_TIME);
+  const [timeLeft, setTimeLeft] = useState(getMaxTime(difficulty));
   const [btnEnabled, setBtnEnabled] = useState(true);
   const [score, setScore] = useState(0);
 
   const decreaseTime = () => {
     setTimeLeft((prevTime) => Math.max(prevTime - 1, 0));
   }
+  //
   useEffect(() => {
-    setSolution(numberOne + numberTwo);
-  }, [numberOne, numberTwo]);
+    if (difficulty === DIFFICULTY.HARD) {
+      setSolution(numberOne + numberTwo + numberThree);
+    } else {
+      setSolution(numberOne + numberTwo);
+    }
+  }, [numberOne, numberTwo, numberThree, difficulty]);
 
   useEffect(() => {
     const timer = setInterval(decreaseTime, 1000); 
@@ -29,12 +39,15 @@ export const useGameLogic = () => {
       setBtnEnabled(false);
       setMsg('Temps écoulé, la bonne réponse était ' + solution);
     }
-  }, [timeLeft]);
+  }, [timeLeft, solution]);
 
   const resetGame = () => {
     setNumberOne(rndNumber());
     setNumberTwo(rndNumber());
-    setTimeLeft(MAX_TIME);
+    if (difficulty === DIFFICULTY.HARD) {
+      setNumberThree(rndNumber());
+    }
+    setTimeLeft(getMaxTime(difficulty));
     setUserAnswer(0);
     setMsg('');
     setBtnEnabled(true);
@@ -42,6 +55,12 @@ export const useGameLogic = () => {
 
   const resetScore = () => {
     setScore(0);
+  }
+
+  const changeDifficulty = () => {
+    setDifficulty(newDifficulty);
+    resetGame();
+    resetScore();
   }
 
   const handleSubmit = () => {
@@ -56,8 +75,11 @@ export const useGameLogic = () => {
   }
 
   return {
+    difficulty,
     numberOne,
     numberTwo,
+    solution,
+    numberThree,
     solution,
     userAnswer,
     msg,
@@ -68,5 +90,6 @@ export const useGameLogic = () => {
     handleSubmit,
     resetGame,
     resetScore,
+    changeDifficulty,
   };
 };
