@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import { useState, useEffect } from 'react';
+import { styles } from './styles';
 
 const MAX_NUMBER = 50;
 const MAX_TIME = 5;
@@ -15,37 +16,6 @@ const formatTime = (time) => {
     return '00 : ' + time;
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    padding: 10,
-    width: 200,
-    marginVertical: 10,
-  },
-  text: {
-    fontSize: 24,
-    marginVertical: 10,
-  },
-  timer: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  message: {
-    marginTop: 20,
-    color: '#666',
-    fontSize: 18,
-  }
-});
-
 export default function App() {
   const [numberOne, setNumberOne] = useState(rndNumber());
   const [numberTwo, setNumberTwo] = useState(rndNumber());
