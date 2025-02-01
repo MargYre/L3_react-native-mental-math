@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { styles } from './styles';
 
 const MAX_NUMBER = 50;
-const MAX_TIME = 5;
+const MAX_TIME = 15;
 
 const rndNumber = () => {
   return Math.floor(Math.random() * MAX_NUMBER);
@@ -24,13 +24,14 @@ export default function App() {
   const [msg, setMsg] = useState('');
   const [timeLeft, setTimeLeft] = useState(MAX_TIME);
   const [btnEnabled, setBtnEnabled] = useState(true);
+  const [score, setScore] = useState(0);
 
   useEffect(() => {
     setSolution(numberOne + numberTwo);
   }, [numberOne, numberTwo]);
 
   useEffect(() => {
-    const timer = setInterval(decreaseTime, 1000);
+    const timer = setInterval(decreaseTime, 1000); 
     return () => clearInterval(timer);
   }, [timeLeft]);
 
@@ -52,14 +53,16 @@ export default function App() {
     setUserAnswer(0);
     setMsg('');
     setBtnEnabled(true);
+    setScore(0);
   }
 
   const handleSubmit = () => {
     if (Number(userAnswer) === solution) {
-      setMsg('Bonne réponse');
+      setScore(score + 1);
+      setMsg(`Bonne réponse ! Score : ${score + 1}`);
       resetGame();
     } else {
-      setMsg('Mauvaise réponse, la réponse était ' + solution);
+      setMsg(`Mauvaise réponse, la réponse était ${solution}. Score final : ${score}`);
       setBtnEnabled(false);
     }
   }
@@ -67,6 +70,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text style={styles.timer}>{formatTime(timeLeft)}</Text>
+      <Text style={styles.text}>Score : {score}</Text>
       <Text style={styles.text}>{numberOne} + {numberTwo} = </Text>
       <TextInput
         style={styles.input}
