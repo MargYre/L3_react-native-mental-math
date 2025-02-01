@@ -53,6 +53,9 @@ export default function App() {
     setUserAnswer(0);
     setMsg('');
     setBtnEnabled(true);
+  }
+
+  const resetScore = () => {
     setScore(0);
   }
 
@@ -88,7 +91,10 @@ export default function App() {
       {!btnEnabled && (
         <Button
           title='Nouvelle partie'
-          onPress={resetGame}
+          onPress={() => {
+            resetGame();
+            resetScore();
+          }}
         />
       )}
     </View>
