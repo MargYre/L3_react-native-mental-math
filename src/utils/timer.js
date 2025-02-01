@@ -1,5 +1,5 @@
-export const EASY_MAX_NUMBER = 15;
-export const HARD_MAX_NUMBER = 10;
+export const EASY_MAX_NUMBER = 10;
+export const HARD_MAX_NUMBER = 15;
 
 export const getMaxTime = (difficulty) => {
   return difficulty === 'hard' ? HARD_MAX_NUMBER : EASY_MAX_NUMBER;
